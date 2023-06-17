@@ -1,9 +1,30 @@
 
-<table class="table table-bordered">
-    <tr *ngFor="let row of sudokugrid;let i = index" style="height: 20px">
-        <th *ngFor="let col of sudokugrid;let j=index" style="height: 20px">
-            {{sudokugrid[i][j]}}
-        </th>
+<div class="main">
+    
+    <div>
+        <h1>Sudoku Solver</h1>
+    </div>
+    <div class="sudokuGrid">     
+            <div *ngFor="let row of [0,1,2,3,4,5,6,7,8];let i = index" class="threeGrid">
+                <div *ngFor="let col of [0,1,2,3,4,5,6,7,8];let j = index">
+                    <input [readonly]="solved" class="box" type="text" [(ngModel)]="sudokugrid[getI(i,j)][getJ(i,j)]" (ngModelChange)="validateInput(getI(i,j),getJ(i,j))" >
+                    <!-- <p class="box">{{i}},{{j}}</p> -->
+                </div>
+            </div>
+            <p *ngIf="validationError" class="validationErrorCss">*Invalid number entered</p>
 
-    </tr>
-</table>
+    </div>
+    <!-- <div class="sudokuGrid">     
+        <div *ngFor="let row of sudokugrid;let i = index">
+            <div *ngFor="let col of sudokugrid;let j = index">
+                <input [readonly]="solved" class="box" type="text" [(ngModel)]="sudokugrid[i][j]" >
+            </div>
+        </div>     
+
+    </div> -->
+    <div class="buttonsSection">
+        <button mat-raised-button color="primary" (click)="solveSudoku()">Solve</button>
+    </div>
+   
+    
+</div>
