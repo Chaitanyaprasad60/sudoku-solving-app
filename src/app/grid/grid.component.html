@@ -1,0 +1,9 @@
+
+<table class="table table-bordered">
+    <tr *ngFor="let row of sudokugrid;let i = index" style="height: 20px">
+        <th *ngFor="let col of sudokugrid;let j=index" style="height: 20px">
+            {{sudokugrid[i][j]}}
+        </th>
+
+    </tr>
+</table>
