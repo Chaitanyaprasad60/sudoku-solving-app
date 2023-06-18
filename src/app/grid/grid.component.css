@@ -53,3 +53,11 @@
 .validationErrorCss {
     color: red;
 }
+
+p {
+    margin: 0 0 0 0 !important;
+}
+
+.boldNumber {
+    font-weight: bolder;
+}
