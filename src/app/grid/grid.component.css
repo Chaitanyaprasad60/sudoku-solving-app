@@ -15,6 +15,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    font-size: 2vw;
 }
 
 .threeGrid{
@@ -70,3 +71,33 @@ p {
 .messages{
     margin-bottom: 3vh;
 }
+
+@media screen and (max-width: 750px) {
+    :root {
+        --boxWidth: 8vw;
+      }
+
+    body {
+      background-color: lightblue;
+    }
+    .sudokuGrid {
+        width: 90vw;
+        font-size: 5vw;
+    }
+    
+    .threeGrid{
+        width: calc(var(--boxWidth)*3 + 0.4vw);
+        height: calc(var(--boxWidth)*3 + 0.4vw);
+          
+    }
+    .box {
+        height: var(--boxWidth);
+        width:  var(--boxWidth);
+    }
+    
+    .buttonsSection {
+        width: 80vw;
+        height: 10vh;
+    }
+    
+  }
