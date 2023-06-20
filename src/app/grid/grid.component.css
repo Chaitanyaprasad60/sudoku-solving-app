@@ -48,6 +48,7 @@
     justify-content: flex-end;
     display: flex;
     margin-top: 2vh;
+    gap:2vw
 }
 
 .validationErrorCss {
@@ -60,4 +61,12 @@ p {
 
 .boldNumber {
     font-weight: bolder;
+}
+
+.errorCell{
+    background-color: red;
+}
+
+.messages{
+    margin-bottom: 3vh;
 }
