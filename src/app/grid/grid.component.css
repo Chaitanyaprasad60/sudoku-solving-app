@@ -99,5 +99,9 @@ p {
         width: 80vw;
         height: 10vh;
     }
+    .instructions{
+        width: 80vw;
+        text-align: center;
+    }
     
   }
