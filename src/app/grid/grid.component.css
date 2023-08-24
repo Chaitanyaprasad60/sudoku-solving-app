@@ -1,24 +1,32 @@
 
 :root {
     --boxWidth: 3.2vw;
+    --border:0.1vw
   }
 .main {
-    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
 }
 
-.sudokuGrid {
+/* .sudokuGrid {
     width: 37vw;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     font-size: 2vw;
+} */
+
+.sudokuGrid{
+    display: grid;    
+    grid-template-columns: repeat(3,  calc(var(--boxWidth)*3 + var(--border)));   
+    /* grid-template-rows: repeat(3, calc(var(--boxWidth)*3 + var(--border)));  */
+    box-sizing: border-box;
+    border: calc(var(--border)*2) solid;
 }
 
-.threeGrid{
+/* .threeGrid{
     width: calc(var(--boxWidth)*3 + 0.4vw);
     height: calc(var(--boxWidth)*3 + 0.4vw);
     outline: 3px solid black;
@@ -28,17 +36,26 @@
     background-color: white;
     text-align:center;
     flex-flow:row wrap;  
+} */
 
+.threeGrid{
+    display: grid;    
+    grid-template-columns: repeat(3,  calc(var(--boxWidth)));   
+    grid-template-rows: repeat(3, calc(var(--boxWidth))); 
+    border: var(--border) solid black;
 }
+
+
 .box {
     height: var(--boxWidth);
     width:  var(--boxWidth);
-    border: 1px solid lightslategray;
+    border: var(--border) solid lightslategray;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: white;
     text-align:center;
+    box-sizing: border-box;
     
 }
 
@@ -81,18 +98,7 @@ p {
       background-color: lightblue;
     }
     .sudokuGrid {
-        width: 90vw;
         font-size: 5vw;
-    }
-    
-    .threeGrid{
-        width: calc(var(--boxWidth)*3 + 0.4vw);
-        height: calc(var(--boxWidth)*3 + 0.4vw);
-          
-    }
-    .box {
-        height: var(--boxWidth);
-        width:  var(--boxWidth);
     }
     
     .buttonsSection {

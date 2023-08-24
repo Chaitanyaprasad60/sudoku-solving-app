@@ -8,12 +8,12 @@
         <p class="validationErrorCss" *ngIf="invalidSudoku || notSolvable">Invalid Sudoku, please Re-Enter</p>
         <p style="color:green" *ngIf="solved && !notSolvable">Hurray Solved Successfully!!</p>
     </div>
-    <div class="sudokuGrid">     
+        <div class="sudokuGrid">     
             <div *ngFor="let row of [0,1,2,3,4,5,6,7,8];let i = index" class="threeGrid">
                 <div *ngFor="let col of [0,1,2,3,4,5,6,7,8];let j = index">
                     <input *ngIf="!solved"
                     [ngClass]="{'boldNumber':isBold(i,j),'errorCell':(rowColBox[0]==getI(i,j) && rowColBox[1]==getJ(i,j))}"
-                    class="box" type="text" [(ngModel)]="sudokugrid[getI(i,j)][getJ(i,j)]">
+                    class="box" type="number" [(ngModel)]="sudokugrid[getI(i,j)][getJ(i,j)]">
                     
                     <p *ngIf="solved"  
                     [ngClass]="{'boldNumber':isBold(i,j)}" 
@@ -21,6 +21,7 @@
                 </div>
             </div>
     </div>
+   
    
     <div class="buttonsSection">
         <button mat-raised-button color="primary" (click)="reset()">Clear</button>
