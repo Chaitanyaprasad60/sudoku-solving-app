@@ -10,6 +10,12 @@
     flex-direction: column;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 /* .sudokuGrid {
     width: 37vw;
     display: flex;
@@ -24,6 +30,7 @@
     /* grid-template-rows: repeat(3, calc(var(--boxWidth)*3 + var(--border)));  */
     box-sizing: border-box;
     border: calc(var(--border)*2) solid;
+    font-size: 2vw;
 }
 
 /* .threeGrid{

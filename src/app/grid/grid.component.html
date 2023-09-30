@@ -11,9 +11,9 @@
         <div class="sudokuGrid">     
             <div *ngFor="let row of [0,1,2,3,4,5,6,7,8];let i = index" class="threeGrid">
                 <div *ngFor="let col of [0,1,2,3,4,5,6,7,8];let j = index">
-                    <input *ngIf="!solved"
-                    [ngClass]="{'boldNumber':isBold(i,j),'errorCell':(rowColBox[0]==getI(i,j) && rowColBox[1]==getJ(i,j))}"
-                    class="box" type="number" [(ngModel)]="sudokugrid[getI(i,j)][getJ(i,j)]">
+                    <input #numericInput type="text"  (input)="onInputChange($event,i,j)" *ngIf="!solved"
+                    [ngClass]="{'boldNumber':isBold(i,j),'errorCell': (errorCells[getI(i,j)][getJ(i,j)] == 1)}"
+                    class="box" [value]="sudokugrid[getI(i,j)][getJ(i,j)]">
                     
                     <p *ngIf="solved"  
                     [ngClass]="{'boldNumber':isBold(i,j)}" 

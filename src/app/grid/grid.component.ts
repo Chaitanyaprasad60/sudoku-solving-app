@@ -1,5 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
+interface InputEventInit extends Event {
+  inputType?: string;
+}
+
 @Component({
   selector: 'app-grid',
   templateUrl: './grid.component.html',
@@ -15,6 +19,7 @@ export class GridComponent implements OnInit {
   row: any[] = [];
   col: any[] = [];
   box: any[] = [];
+  errorCells:  any[] = [];
   inLastCondition = false;
   counter = 0;
   notSolvable = false;
@@ -39,6 +44,44 @@ export class GridComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  onInputChange(event: InputEventInit,i:number,j:number) {
+
+    const inputElement = event.target as HTMLInputElement;
+    const inputValue = inputElement.value;
+    const I = this.getI(i,j)
+    const J = this.getJ(i,j)
+    
+    if (event.inputType == "deleteContentBackward"){      
+      let cor =  parseInt(this.sudokugrid[I][J]) - 1;
+      this.row[I][cor] = 0;
+      this.col[J][cor] = 0;
+      this.box[this.getBox([I, J])][cor] = 0;
+      return
+    }
+
+    // Remove any non-digit characters
+    let sanitizedValue = inputValue.replace(/[^0-9]/g, '');
+    if(sanitizedValue.length > 1){  //If we enter multiple digits the value will be replaced by latest digits. 
+      sanitizedValue = sanitizedValue.slice(-1); 
+    }
+    // Update the input value with the sanitized value
+
+    let cor = parseInt(sanitizedValue) - 1;
+
+    if (this.row[I][cor] == 1 || this.col[J][cor] == 1 || this.box[this.getBox([I, J])][cor] == 1) {
+      sanitizedValue = ""
+    }
+    else{
+      this.row[I][cor] = 1;
+      this.col[J][cor] = 1;
+      this.box[this.getBox([I, J])][cor] = 1;
+    }
+
+    inputElement.value = sanitizedValue;
+    this.sudokugrid[I][J] = sanitizedValue;   
+    
+
+  }
   //this function first checks whether the sudoku is valid and then solves the grid. 
   solveSudoku() {
     this.invalidSudoku = false;
@@ -67,7 +110,6 @@ export class GridComponent implements OnInit {
   solve(start = [0, 0]): boolean | undefined {
     this.counter += 1;
     if (this.counter > 10000000) {
-      //console.log("This Sudoku is not solvable",this.counter)
       this.solved = true;
       this.notSolvable = true;
       return false;
@@ -75,7 +117,6 @@ export class GridComponent implements OnInit {
     if (this.ans[start[0]][start[1]] != '0' && this.ans[start[0]][start[1]]!='') {
       let k;
       if (start[0] === 8 && start[1] === 8) {
-        //console.log('Solved Sudoku Successfully!!', this.counter);
         this.solved = true;
         return true;
       }
@@ -161,6 +202,11 @@ export class GridComponent implements OnInit {
     this.box = JSON.parse(JSON.stringify(this.zeroes));
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
+        if(this.ans[i][j] == null) {
+          this.ans[i][j] = ""
+          this.sudokugrid[i][j] = ""
+        }
+       
         if (this.ans[i][j] != '0'  && this.ans[i][j] !== '') {
           if(isNaN(parseInt(this.ans[i][j]))){   //To restrict users from entering any Letters
             return [i,j]
@@ -170,7 +216,6 @@ export class GridComponent implements OnInit {
             return [i,j]
           }
           if (this.row[i][cor] == 1 || this.col[j][cor] == 1 || this.box[this.getBox([i, j])][cor] == 1) {
-            console.log(i, j, this.row, this.col, this.box)
             return [i, j]
           }
           else {
@@ -229,6 +274,7 @@ export class GridComponent implements OnInit {
     this.row = JSON.parse(JSON.stringify(this.zeroes));
     this.col = JSON.parse(JSON.stringify(this.zeroes));
     this.box = JSON.parse(JSON.stringify(this.zeroes));
+    this.errorCells = JSON.parse(JSON.stringify(this.zeroes));
   }
 
   reset() {
