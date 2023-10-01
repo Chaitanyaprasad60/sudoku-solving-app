@@ -134,14 +134,13 @@ export class GridComponent implements OnInit {
     // Update the input value with the sanitized value
     
     let cor = parseInt(sanitizedValue) - 1;
-    console.log("COR = ",cor,!cor)
     // This condition is added if same value is entered twice in same box it should not throw a error - Once the value is change the row/col should go back. 
     // This should only give error if it's a differnt box in same row,col or group box
     if (parseInt(sanitizedValue) && (this.row[I][cor] == 1 || this.col[J][cor] == 1 || this.box[this.getBox([I, J])][cor] == 1)) {
       sanitizedValue = ""
       this.highlightBox(I, J, cor);
     }
-    else if(cor) {
+    else if(parseInt(sanitizedValue)) {
       this.row[I][cor] = 1;
       this.col[J][cor] = 1;
       this.box[this.getBox([I, J])][cor] = 1;
