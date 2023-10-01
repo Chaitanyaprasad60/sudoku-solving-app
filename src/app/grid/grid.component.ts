@@ -62,13 +62,23 @@ export class GridComponent implements OnInit {
     // Remove any non-digit characters
     let sanitizedValue = inputValue.replace(/[^0-9]/g, '');
     if(sanitizedValue.length > 1){  //If we enter multiple digits the value will be replaced by latest digits. 
+      let removedValue = sanitizedValue[0]
       sanitizedValue = sanitizedValue.slice(-1); 
+
+      // By entering a new value this value is automatically removed in that box
+      let cor = parseInt(removedValue) - 1;
+      this.row[I][cor] = 0;
+      this.col[J][cor] = 0;
+      this.box[this.getBox([I, J])][cor] = 0;
+
+
     }
     // Update the input value with the sanitized value
 
     let cor = parseInt(sanitizedValue) - 1;
-
-    if (this.row[I][cor] == 1 || this.col[J][cor] == 1 || this.box[this.getBox([I, J])][cor] == 1) {
+    // This condition is added if same value is entered twice in same box it should not throw a error - Once the value is change the row/col should go back. 
+    // This should only give error if it's a differnt box in same row,col or group box
+    if (this.row[I][cor] == 1 || this.col[J][cor] == 1 || this.box[this.getBox([I, J])][cor] == 1){
       sanitizedValue = ""
     }
     else{
