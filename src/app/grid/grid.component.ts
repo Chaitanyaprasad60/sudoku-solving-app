@@ -61,6 +61,10 @@ export class GridComponent implements OnInit {
 
     // Remove any non-digit characters
     let sanitizedValue = inputValue.replace(/[^1-9]/g, '');
+    if( this.sudokugrid[I][J] == sanitizedValue) {
+      inputElement.value = sanitizedValue;
+      return;
+    }
 
     if (sanitizedValue.length > 1) {  //If we enter multiple digits the value will be replaced by latest digits. 
       let removedValue = sanitizedValue[0]
@@ -74,8 +78,9 @@ export class GridComponent implements OnInit {
 
     }
     // Update the input value with the sanitized value
-
+    
     let cor = parseInt(sanitizedValue) - 1;
+    console.log("COR = ",cor,!cor)
     // This condition is added if same value is entered twice in same box it should not throw a error - Once the value is change the row/col should go back. 
     // This should only give error if it's a differnt box in same row,col or group box
     if (cor && (this.row[I][cor] == 1 || this.col[J][cor] == 1 || this.box[this.getBox([I, J])][cor] == 1)) {
