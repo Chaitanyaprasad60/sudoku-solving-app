@@ -60,7 +60,7 @@ export class GridComponent implements OnInit {
     }
 
     // Remove any non-digit characters
-    let sanitizedValue = inputValue.replace(/[^0-9]/g, '');
+    let sanitizedValue = inputValue.replace(/[^1-9]/g, '');
 
     if (sanitizedValue.length > 1) {  //If we enter multiple digits the value will be replaced by latest digits. 
       let removedValue = sanitizedValue[0]
