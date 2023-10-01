@@ -11,7 +11,7 @@ interface InputEventInit extends Event {
   encapsulation: ViewEncapsulation.None
 })
 export class GridComponent implements OnInit {
-  sudokugrid: any[] = [];
+  sudokugrid: string[][] = [];
   solved: boolean = false;
   boxWidth = "3.2"
   validationError = false;
@@ -19,7 +19,7 @@ export class GridComponent implements OnInit {
   row: any[] = [];
   col: any[] = [];
   box: any[] = [];
-  errorCells:  any[] = [];
+  errorCells: any[] = []; // This Doesn't error cells but highlights cells the are already there when user enter same value in different row. 
   inLastCondition = false;
   counter = 0;
   notSolvable = false;
@@ -44,15 +44,15 @@ export class GridComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onInputChange(event: InputEventInit,i:number,j:number) {
+  onInputChange(event: InputEventInit, i: number, j: number) {
 
     const inputElement = event.target as HTMLInputElement;
     const inputValue = inputElement.value;
-    const I = this.getI(i,j)
-    const J = this.getJ(i,j)
-    
-    if (event.inputType == "deleteContentBackward"){      
-      let cor =  parseInt(this.sudokugrid[I][J]) - 1;
+    const I = this.getI(i, j)
+    const J = this.getJ(i, j)
+
+    if (event.inputType == "deleteContentBackward") {
+      let cor = parseInt(this.sudokugrid[I][J]) - 1;
       this.row[I][cor] = 0;
       this.col[J][cor] = 0;
       this.box[this.getBox([I, J])][cor] = 0;
@@ -61,9 +61,9 @@ export class GridComponent implements OnInit {
 
     // Remove any non-digit characters
     let sanitizedValue = inputValue.replace(/[^0-9]/g, '');
-    if(sanitizedValue.length > 1){  //If we enter multiple digits the value will be replaced by latest digits. 
+    if (sanitizedValue.length > 1) {  //If we enter multiple digits the value will be replaced by latest digits. 
       let removedValue = sanitizedValue[0]
-      sanitizedValue = sanitizedValue.slice(-1); 
+      sanitizedValue = sanitizedValue.slice(-1);
 
       // By entering a new value this value is automatically removed in that box
       let cor = parseInt(removedValue) - 1;
@@ -78,18 +78,56 @@ export class GridComponent implements OnInit {
     let cor = parseInt(sanitizedValue) - 1;
     // This condition is added if same value is entered twice in same box it should not throw a error - Once the value is change the row/col should go back. 
     // This should only give error if it's a differnt box in same row,col or group box
-    if (this.row[I][cor] == 1 || this.col[J][cor] == 1 || this.box[this.getBox([I, J])][cor] == 1){
+    if (this.row[I][cor] == 1 || this.col[J][cor] == 1 || this.box[this.getBox([I, J])][cor] == 1) {
       sanitizedValue = ""
+      this.highlightBox(I, J, cor);
     }
-    else{
+    else {
       this.row[I][cor] = 1;
       this.col[J][cor] = 1;
       this.box[this.getBox([I, J])][cor] = 1;
     }
 
     inputElement.value = sanitizedValue;
-    this.sudokugrid[I][J] = sanitizedValue;   
-    
+    this.sudokugrid[I][J] = sanitizedValue;
+
+
+  }
+
+  highlightBox(I: number, J: number, cor: number) { //This function highlight all the duplicae numbers. 
+
+    if (this.row[I][cor] == 1) {
+      let otherJ = this.sudokugrid[I].findIndex((x: string) => parseInt(x) == cor + 1);
+      this.errorCells[I][otherJ] = 1;
+      setTimeout(() => {
+        this.errorCells[I][otherJ] = 0;
+      }, 500)
+
+    }
+    if (this.col[J][cor] == 1) {
+      let otherI = this.sudokugrid.findIndex((x: string[]) => parseInt(x[J]) == cor + 1);
+      this.errorCells[otherI][J] = 1;
+      setTimeout(() => {
+        this.errorCells[otherI][J] = 0;
+      }, 500)
+    };
+
+    if (this.box[this.getBox([I, J])][cor] == 1) {
+      let boxNumber = this.getBox([I, J])
+      for (let i = 0; i < 9; i++) {
+        for (let j = 0; j < 9; j++) {
+          if (this.getBox([i, j]) == boxNumber) {
+            if (parseInt(this.sudokugrid[i][j]) == cor + 1) {        
+              this.errorCells[i][j] = 1;
+              setTimeout(() => {
+                this.errorCells[i][j] = 0;
+              }, 500)
+              return;
+            }
+          }
+        }
+      }
+    };
 
   }
   //this function first checks whether the sudoku is valid and then solves the grid. 
@@ -124,7 +162,7 @@ export class GridComponent implements OnInit {
       this.notSolvable = true;
       return false;
     }
-    if (this.ans[start[0]][start[1]] != '0' && this.ans[start[0]][start[1]]!='') {
+    if (this.ans[start[0]][start[1]] != '0' && this.ans[start[0]][start[1]] != '') {
       let k;
       if (start[0] === 8 && start[1] === 8) {
         this.solved = true;
@@ -202,7 +240,7 @@ export class GridComponent implements OnInit {
     }
     return ans;
   }
-  
+
 
   //This Functions checks the whole sudoku Grid and return the first invalid element
   //Examples of Invalid Elements - Same numbers in row/column/box, Any number or letter except 1-9
@@ -212,18 +250,18 @@ export class GridComponent implements OnInit {
     this.box = JSON.parse(JSON.stringify(this.zeroes));
     for (let i = 0; i < 9; i++) {
       for (let j = 0; j < 9; j++) {
-        if(this.ans[i][j] == null) {
+        if (this.ans[i][j] == null) {
           this.ans[i][j] = ""
           this.sudokugrid[i][j] = ""
         }
-       
-        if (this.ans[i][j] != '0'  && this.ans[i][j] !== '') {
-          if(isNaN(parseInt(this.ans[i][j]))){   //To restrict users from entering any Letters
-            return [i,j]
+
+        if (this.ans[i][j] != '0' && this.ans[i][j] !== '') {
+          if (isNaN(parseInt(this.ans[i][j]))) {   //To restrict users from entering any Letters
+            return [i, j]
           }
           const cor = parseInt(this.ans[i][j]) - 1;
-          if(cor > 8 || cor < 0){ //To restrict users from entering any number other than 1-9
-            return [i,j]
+          if (cor > 8 || cor < 0) { //To restrict users from entering any number other than 1-9
+            return [i, j]
           }
           if (this.row[i][cor] == 1 || this.col[j][cor] == 1 || this.box[this.getBox([i, j])][cor] == 1) {
             return [i, j]
@@ -243,9 +281,9 @@ export class GridComponent implements OnInit {
   //This function freshly assigns rows,columns and boxes which will help in solving sudoku
   intialSetup() {
     try {
-    this.row = JSON.parse(JSON.stringify(this.zeroes));
-    this.col = JSON.parse(JSON.stringify(this.zeroes));
-    this.box = JSON.parse(JSON.stringify(this.zeroes));
+      this.row = JSON.parse(JSON.stringify(this.zeroes));
+      this.col = JSON.parse(JSON.stringify(this.zeroes));
+      this.box = JSON.parse(JSON.stringify(this.zeroes));
       for (let i = 0; i < 9; i++) {
         for (let j = 0; j < 9; j++) {
           if (this.ans[i][j] !== '0' && this.ans[i][j] !== '') {
@@ -270,8 +308,8 @@ export class GridComponent implements OnInit {
     this.counter = 0;
     this.notSolvable = false;
     this.solved = false;
-   
-    this.sudokugrid =  [['', '', '', '', '', '', '', '', ''],
+
+    this.sudokugrid = [['', '', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', '', ''],
     ['', '', '', '', '', '', '', '', ''],
@@ -291,10 +329,10 @@ export class GridComponent implements OnInit {
     this.initializeArrays();
   }
 
-  isBold(i:number,j:number){
-    let x = this.getI(i,j);
-    let y = this.getJ(i,j);
-    return this.sudokugrid[x][y]!='0' && this.sudokugrid[x][y]!=''
+  isBold(i: number, j: number) {
+    let x = this.getI(i, j);
+    let y = this.getJ(i, j);
+    return this.sudokugrid[x][y] != '0' && this.sudokugrid[x][y] != ''
   }
 
 
