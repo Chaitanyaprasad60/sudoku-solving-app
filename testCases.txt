@@ -1,0 +1,6 @@
+1. Enter multiple numbers in one box
+    a. Enter numbers and then letters
+    b. Enter letters and then numbers
+    c. Enter numbers and letters. 
+2. Enter a letter in a box and enter a same number is parallel box. 
+3. 

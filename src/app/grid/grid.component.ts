@@ -110,6 +110,7 @@ export class GridComponent implements OnInit {
       this.row[I][cor] = 0;
       this.col[J][cor] = 0;
       this.box[this.getBox([I, J])][cor] = 0;
+      this.sudokugrid[I][J] = "";
       return
     }
 
@@ -191,11 +192,15 @@ export class GridComponent implements OnInit {
   //this function first checks whether the sudoku is valid and then solves the grid. 
   solveSudoku() {
     this.invalidSudoku = false;
+    this.notSolvable = false;
     this.ans = JSON.parse(JSON.stringify(this.sudokugrid));
     this.rowColBox = this.updateRowColBox();
     if (this.rowColBox[0] == -1 && this.rowColBox[1] == -1) {
       this.intialSetup();
-      this.solve();
+      let solveResponse = this.solve();
+      if (!solveResponse){
+        this.notSolvable = true;
+      }
     }
     else {
       this.invalidSudoku = true;
@@ -215,7 +220,8 @@ export class GridComponent implements OnInit {
   //Solves the whole Sudoku grid based on Backtracking. 
   solve(start = [0, 0]): boolean | undefined {
     this.counter += 1;
-    if (this.counter > 10000000) {
+  
+    if (this.counter > 1000000) {
       this.solved = true;
       this.notSolvable = true;
       return false;
