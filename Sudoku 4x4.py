@@ -102,14 +102,6 @@ while True:
 
 print("Answer is solvable till here so far - ")
 prints(sudoku)
-                        
-            
-    
-def solve(empty):
-    if len(empty)==0:
-        prints(sudoku)
-        return 1
-    
 
     
 
