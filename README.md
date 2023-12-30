@@ -1,12 +1,9 @@
 # Sudoku
 You can just enter a Sudoku and this web page will solve it.    
 I am using a backtracking algorithm to solve the sudoku.  
-It is written in Angular Framework. 
+I wrote the code in Python first and then converted it to Tyscrpt to host it. 
 
-## Development server
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Build
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+# Check Live Project Here
+https://sudoku-solving-app.vercel.app/ 
 
 
